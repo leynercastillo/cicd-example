@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ViewController" customModule="cicdexample" customModuleProvider="target">
+            <connections>
+                <outlet property="actionButton" destination="Gci-dP-NuW" id="fgn-0j-erU"/>
+                <outlet property="greetingLabel" destination="NVQ-mK-OXu" id="JAS-z7-hvG"/>
+                <outlet property="nameTextField" destination="Zsc-lp-Fub" id="dNA-Tn-G8p"/>
+                <outlet property="view" destination="3fS-jw-hrY" id="oNj-0Z-aO9"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="3fS-jw-hrY">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zsc-lp-Fub">
+                    <rect key="frame" x="32" y="431" width="350" height="34"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gci-dP-NuW">
+                    <rect key="frame" x="32" y="792" width="350" height="54"/>
+                    <color key="backgroundColor" systemColor="systemBlueColor"/>
+                    <inset key="contentEdgeInsets" minX="0.0" minY="16" maxX="0.0" maxY="16"/>
+                    <state key="normal" title="Button">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <connections>
+                        <action selector="didTapActionButton:" destination="-1" eventType="touchUpInside" id="NOC-6H-82a"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NVQ-mK-OXu">
+                    <rect key="frame" x="32" y="224" width="350" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="CrW-Rq-KhF"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Gci-dP-NuW" firstAttribute="leading" secondItem="CrW-Rq-KhF" secondAttribute="leading" constant="32" id="9VQ-Yg-7R3"/>
+                <constraint firstItem="Gci-dP-NuW" firstAttribute="bottom" secondItem="CrW-Rq-KhF" secondAttribute="bottom" constant="-16" id="FAe-Mx-3fD"/>
+                <constraint firstItem="NVQ-mK-OXu" firstAttribute="centerY" secondItem="3fS-jw-hrY" secondAttribute="centerY" multiplier="0.5" id="GHM-XU-FCe"/>
+                <constraint firstItem="Zsc-lp-Fub" firstAttribute="leading" secondItem="CrW-Rq-KhF" secondAttribute="leading" constant="32" id="Zgi-ZO-yNe"/>
+                <constraint firstItem="CrW-Rq-KhF" firstAttribute="trailing" secondItem="Zsc-lp-Fub" secondAttribute="trailing" constant="32" id="e7b-aN-ddq"/>
+                <constraint firstItem="CrW-Rq-KhF" firstAttribute="trailing" secondItem="NVQ-mK-OXu" secondAttribute="trailing" constant="32" id="fEt-8T-cVq"/>
+                <constraint firstItem="NVQ-mK-OXu" firstAttribute="leading" secondItem="CrW-Rq-KhF" secondAttribute="leading" constant="32" id="fT5-dE-uwW"/>
+                <constraint firstItem="CrW-Rq-KhF" firstAttribute="trailing" secondItem="Gci-dP-NuW" secondAttribute="trailing" constant="32" id="tEr-qN-ryj"/>
+                <constraint firstItem="Zsc-lp-Fub" firstAttribute="centerY" secondItem="3fS-jw-hrY" secondAttribute="centerY" id="zgh-l6-CMP"/>
+            </constraints>
+            <point key="canvasLocation" x="-17" y="-532"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
