@@ -1,0 +1,27 @@
+name: "merge_develop"
+on: # rebuild any PRs and main branch changes
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    timeout-minutes: 50
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Select xcode version
+      uses: maxim-lobanov/setup-xcode@v1.1
+      with:
+        xcode-version: '12'
+
+    - name: Dependencies
+      run: ci-actions/setup_dependencies.sh
+    
+    - name: Unit tests, build and distribuite
+      run: branch_name=develop ci-actions/build.sh
+      env:
+        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+        HOCKEY_APP_TOKEN: ${{ secrets.HOCKEY_APP_TOKEN }}

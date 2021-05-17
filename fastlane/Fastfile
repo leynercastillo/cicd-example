@@ -1,0 +1,145 @@
+fastlane_require 'xcodeproj'
+fastlane_version "2.180.0"
+
+########################################################
+# build_app
+########################################################
+build_workspace_name = ""
+build_project_name = "cicdexample.xcodeproj"
+build_export_method_development = "development"
+build_export_method_app_store = "app-store"
+build_scheme = "cicdexample"
+build_scheme_debug = "cicdexample"
+xcode_project_configuration_development = "Debug" # configuration is Debug or Release
+xcode_project_configuration_release = "Release" # configuration is Debug or Release
+
+########################################################
+# AppCenter
+########################################################
+api_token = "9920c63696cf1fd37c518f66f17a3116b0075e94"
+owner_name = "Eyss"
+ipa_path = "./hopnow.ipa"
+appcenter_destinations = "Collaborators"
+app_center_app_name = "cicdexample"
+
+########################################################
+# Match
+########################################################
+team_id_develop = "28674Q7ZF7"
+app_id_develop = "com.leyner.cicdexample"
+
+########################################################
+# iOS
+########################################################
+
+default_platform :ios
+platform :ios do
+
+  ########################################################
+  # Develop build lanes
+  ########################################################
+
+  desc "Creates Develop build"
+  lane :develop do |options|
+    begin
+      release_notes = options[:release_notes] || "No release notes provided."
+
+      # => Step 1): Create develop build
+      # => Build develop
+      build_debug_develop
+
+
+      # => Upload debug develop build to hockey app if it is a merge
+      upload_to_appcenter(release_notes)
+  end
+
+  desc "Build the project"
+  private_lane :build_debug_develop do
+    # => Determine scheme to be compiled.
+    scheme = build_scheme_debug
+    
+    match_retrieve_only_develop_type
+    
+    # => Build
+    build(scheme: scheme, export_method: "development")
+  end
+
+  desc "Build the project"
+  private_lane :build do |options|
+    export_method = options[:export_method] || "development"
+    scheme = options[:scheme] || "Oxxo QA"
+
+    gym(
+      scheme: options[:scheme],
+      include_bitcode: true,
+      include_symbols: true,
+      export_method: export_method,
+      silent: true
+    )
+
+  end
+
+  # => Single certificate retrieval lanes
+  private_lane :match_retrieve_only_develop_type do
+    type = "development"
+    keychain_name = "develop"
+    branch = "develop"
+
+    retrieve_certificate_and_profiles_of_type(type, keychain_name, app_id_develop, team_id_develop, branch)
+  end
+
+  ########################################################
+  # Match - _anes and functions 
+  ########################################################
+
+  desc "Retrieve and update (where needed) all provisioning profiles and signing identity for Development using Match"
+  lane :match_update_develop do
+    # => Dev
+    match(
+      app_identifier: app_id_develop,
+      team_id: team_id_develop,
+      git_branch: "develop"
+    )
+  end
+
+  desc "Type can be any of following: appstore, adhoc, development, enterprise"
+  def retrieve_certificate_and_profiles_of_type(certificate_type, name_of_keychain, app_id, team_id, branch)
+    keychain_name = "#{ENV["MATCH_KEYCHAIN_NAME"]}_#{name_of_keychain}"
+
+    match(
+      readonly: true,
+      type: certificate_type,
+      app_identifier: app_id,
+      team_id: team_id,
+      git_branch: branch
+    )
+  end
+
+  ########################################################
+  # Scan
+  ########################################################
+  desc "Runs all the Unit tests"
+  lane :test_unit do |options|
+    begin
+    scan(
+      scheme: "cicdexampleTests",
+      derived_data_path: "./DerivedData",
+      output_directory: "./reports",
+      code_coverage: true
+    )
+  end
+
+########################################################
+  # Distribution
+  ########################################################
+  def upload_to_appcenter(release_notes)
+    appcenter_upload(
+      api_token: ENV["APPCENTER_TOKEN"],
+      owner_name: owner_name,
+      app_name: app_center_app_name,
+      ipa: ipa_path,
+      release_notes: release_notes
+   )
+  end
+    
+end
