@@ -105,6 +105,7 @@ platform :ios do
       )
       match(
         keychain_name: keychain_name,
+        git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"],
         keychain_password: ENV["MATCH_PASSWORD"],
         readonly: true,
         app_identifier: app_id,
@@ -113,6 +114,7 @@ platform :ios do
       )
     else
       match(
+      	git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"],
         app_identifier: app_id,
         team_id: team_id,
         git_branch: branch
@@ -153,9 +155,9 @@ platform :ios do
   lane :match_update_develop do
     # => Dev
     match(
-      app_identifier: app_id_develop,
-      team_id: team_id_develop,
-      git_branch: "develop"
+      	app_identifier: app_id_develop,
+      	team_id: team_id_develop,
+      	git_branch: "develop"
     )
   end
 end

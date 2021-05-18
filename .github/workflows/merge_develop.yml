@@ -24,4 +24,4 @@ jobs:
       env:
         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-        HOCKEY_APP_TOKEN: ${{ secrets.APPCENTER_TOKEN }}
+        APPCENTER_TOKEN: ${{ secrets.APPCENTER_TOKEN }}
