@@ -10,6 +10,7 @@ build_export_method_development = "development"
 build_export_method_app_store = "app-store"
 build_scheme = "cicdexample"
 build_scheme_debug = "cicdexample"
+test_scheme = "cicdexampleTests"
 xcode_project_configuration_development = "Debug" # configuration is Debug or Release
 xcode_project_configuration_release = "Release" # configuration is Debug or Release
 
@@ -17,15 +18,15 @@ xcode_project_configuration_release = "Release" # configuration is Debug or Rele
 # AppCenter
 ########################################################
 api_token = "9920c63696cf1fd37c518f66f17a3116b0075e94"
-owner_name = "Eyss"
-ipa_path = "./hopnow.ipa"
+owner_name = "leynercastillo"
+ipa_path = "./cicdexample.ipa"
 appcenter_destinations = "Collaborators"
 app_center_app_name = "cicdexample"
 
 ########################################################
 # Match
 ########################################################
-team_id_develop = "28674Q7ZF7"
+team_id_develop = "WM35KJA6AZ"
 app_id_develop = "com.leyner.cicdexample"
 
 ########################################################
@@ -41,7 +42,6 @@ platform :ios do
 
   desc "Creates Develop build"
   lane :develop do |options|
-    begin
       release_notes = options[:release_notes] || "No release notes provided."
 
       # => Step 1): Create develop build
@@ -50,7 +50,7 @@ platform :ios do
 
 
       # => Upload debug develop build to hockey app if it is a merge
-      upload_to_appcenter(release_notes)
+      upload_to_appcenter(owner_name, app_center_app_name, ipa_path, api_token, release_notes)
   end
 
   desc "Build the project"
@@ -85,13 +85,71 @@ platform :ios do
     keychain_name = "develop"
     branch = "develop"
 
-    retrieve_certificate_and_profiles_of_type(type, keychain_name, app_id_develop, team_id_develop, branch)
+    retrieve_certificate_and_profiles_of_type(type, keychain_name, app_id_develop, team_id_develop, branch, false)
   end
 
   ########################################################
-  # Match - _anes and functions 
+  # Match - Functions 
   ########################################################
+  desc "Type can be any of following: appstore, adhoc, development, enterprise"
+  def retrieve_certificate_and_profiles_of_type(certificate_type, name_of_keychain, app_id, team_id, branch, is_ci)
+    keychain_name = "#{ENV["MATCH_KEYCHAIN_NAME"]}_#{name_of_keychain}"
 
+    if is_ci
+      create_keychain(
+        name: keychain_name,
+        password: "cicdexample",#ENV["MATCH_PASSWORD"],
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        add_to_search_list: true
+      )
+      match(
+        keychain_name: keychain_name,
+        keychain_password: "cicdexample",#ENV["MATCH_PASSWORD"],
+        #readonly: true,
+        app_identifier: app_id,
+        team_id: team_id,
+        git_branch: branch
+      )
+    else
+      match(
+        app_identifier: app_id,
+        team_id: team_id,
+        git_branch: branch
+      )
+    end
+  end
+
+  ########################################################
+  # Scan
+  ########################################################
+  desc "Runs all the Unit tests"
+  lane :test_unit do
+    scan(
+      scheme: test_scheme,
+      derived_data_path: "./DerivedData",
+      output_directory: "./reports",
+      code_coverage: true
+    )
+  end
+
+  ########################################################
+  # Distribution
+  ########################################################
+  def upload_to_appcenter(owner_name, app_name, ipa_path, api_token, release_notes)
+    appcenter_upload(
+      api_token: api_token, #ENV["APPCENTER_TOKEN"],
+      owner_name: owner_name,
+      app_name: app_name,
+      ipa: ipa_path,
+      release_notes: release_notes
+   )
+  end
+    
+  ########################################################
+  # Distribution
+  ########################################################
   desc "Retrieve and update (where needed) all provisioning profiles and signing identity for Development using Match"
   lane :match_update_develop do
     # => Dev
@@ -101,45 +159,4 @@ platform :ios do
       git_branch: "develop"
     )
   end
-
-  desc "Type can be any of following: appstore, adhoc, development, enterprise"
-  def retrieve_certificate_and_profiles_of_type(certificate_type, name_of_keychain, app_id, team_id, branch)
-    keychain_name = "#{ENV["MATCH_KEYCHAIN_NAME"]}_#{name_of_keychain}"
-
-    match(
-      readonly: true,
-      type: certificate_type,
-      app_identifier: app_id,
-      team_id: team_id,
-      git_branch: branch
-    )
-  end
-
-  ########################################################
-  # Scan
-  ########################################################
-  desc "Runs all the Unit tests"
-  lane :test_unit do |options|
-    begin
-    scan(
-      scheme: "cicdexampleTests",
-      derived_data_path: "./DerivedData",
-      output_directory: "./reports",
-      code_coverage: true
-    )
-  end
-
-########################################################
-  # Distribution
-  ########################################################
-  def upload_to_appcenter(release_notes)
-    appcenter_upload(
-      api_token: ENV["APPCENTER_TOKEN"],
-      owner_name: owner_name,
-      app_name: app_center_app_name,
-      ipa: ipa_path,
-      release_notes: release_notes
-   )
-  end
-    
 end
