@@ -106,7 +106,7 @@ platform :ios do
       match(
         keychain_name: keychain_name,
         keychain_password: ENV["MATCH_PASSWORD"],
-        #readonly: true,
+        readonly: true,
         app_identifier: app_id,
         team_id: team_id,
         git_branch: branch
