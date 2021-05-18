@@ -66,7 +66,7 @@ platform :ios do
   desc "Build the project"
   private_lane :build do |options|
     export_method = options[:export_method] || "development"
-    scheme = options[:scheme] || "Oxxo QA"
+    scheme = options[:scheme]
 
     gym(
       scheme: options[:scheme],
@@ -149,7 +149,7 @@ platform :ios do
   end
     
   ########################################################
-  # Distribution
+  # Helpers
   ########################################################
   desc "Retrieve and update (where needed) all provisioning profiles and signing identity for Development using Match"
   lane :match_update_develop do

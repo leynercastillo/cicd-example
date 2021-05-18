@@ -5,6 +5,7 @@ ruby -v
 # Install gems
 bundle install
 
+# Example about how to manage your dependency tool
 pod install --repo-update
 
 # This will solve fastlane path issues.
