@@ -17,7 +17,6 @@ xcode_project_configuration_release = "Release" # configuration is Debug or Rele
 ########################################################
 # AppCenter
 ########################################################
-api_token = "9920c63696cf1fd37c518f66f17a3116b0075e94"
 owner_name = "leynercastillo"
 ipa_path = "./cicdexample.ipa"
 appcenter_destinations = "Collaborators"
@@ -50,7 +49,7 @@ platform :ios do
 
 
       # => Upload debug develop build to hockey app if it is a merge
-      upload_to_appcenter(owner_name, app_center_app_name, ipa_path, api_token, release_notes)
+      upload_to_appcenter(owner_name, app_center_app_name, ipa_path, release_notes)
   end
 
   desc "Build the project"
@@ -85,7 +84,7 @@ platform :ios do
     keychain_name = "develop"
     branch = "develop"
 
-    retrieve_certificate_and_profiles_of_type(type, keychain_name, app_id_develop, team_id_develop, branch, false)
+    retrieve_certificate_and_profiles_of_type(type, keychain_name, app_id_develop, team_id_develop, branch, true)
   end
 
   ########################################################
@@ -98,7 +97,7 @@ platform :ios do
     if is_ci
       create_keychain(
         name: keychain_name,
-        password: "cicdexample",#ENV["MATCH_PASSWORD"],
+        password: ENV["MATCH_PASSWORD"],
         default_keychain: true,
         unlock: true,
         timeout: 3600,
@@ -106,7 +105,7 @@ platform :ios do
       )
       match(
         keychain_name: keychain_name,
-        keychain_password: "cicdexample",#ENV["MATCH_PASSWORD"],
+        keychain_password: ENV["MATCH_PASSWORD"],
         #readonly: true,
         app_identifier: app_id,
         team_id: team_id,
@@ -137,9 +136,9 @@ platform :ios do
   ########################################################
   # Distribution
   ########################################################
-  def upload_to_appcenter(owner_name, app_name, ipa_path, api_token, release_notes)
+  def upload_to_appcenter(owner_name, app_name, ipa_path, release_notes)
     appcenter_upload(
-      api_token: api_token, #ENV["APPCENTER_TOKEN"],
+      api_token: ENV["APPCENTER_TOKEN"],
       owner_name: owner_name,
       app_name: app_name,
       ipa: ipa_path,
