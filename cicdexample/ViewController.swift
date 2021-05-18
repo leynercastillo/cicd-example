@@ -34,9 +34,9 @@ class ViewController: UIViewController {
 
     private func setupActionButton() {
         actionButton.setTitle("Reset", for: .selected)
-        actionButton.setTitleColor(.blue, for: .selected)
+        actionButton.setTitleColor(UIColor.blue, for: .selected)
         actionButton.setTitle("Greet me", for: .normal)
-        actionButton.setTitleColor(.white, for: .normal)
+        actionButton.setTitleColor(UIColor.white, for: .normal)
         resetForm()
     }
 
@@ -62,7 +62,7 @@ class ViewController: UIViewController {
     }
 
     private func updateActionButton() {
-        actionButton.backgroundColor = actionButton.isSelected ? .white : actionButton.isEnabled ? .blue : .blue.withAlphaComponent(0.7)
+        actionButton.backgroundColor = actionButton.isSelected ? UIColor.white : actionButton.isEnabled ? UIColor.blue : UIColor.blue.withAlphaComponent(0.7)
     }
 
     // MARK: - Action
